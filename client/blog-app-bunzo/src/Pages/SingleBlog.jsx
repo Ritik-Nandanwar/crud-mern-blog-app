@@ -52,9 +52,6 @@ const SingleBlog = () => {
     setTags(e.map((x) => x.value)); //map() returns a array(LOOK IT UP!!!)
     console.log(e);
   };
-  useEffect(() => {
-    getOneBlogById();
-  }, []);
   const updateSingleBlog = async ({
     title,
     content,
@@ -67,17 +64,24 @@ const SingleBlog = () => {
     console.log("content- ", content);
     console.log("date- ", selectedDate);
     console.log("tags- ", selected_options);
-    await fetch("http://localhost:8080/updateone", {
-      method: "POST",
-      body: JSON.stringify({ title, content, author, selectedDate, tags }),
-      headers: {
-        "Content-type": "application/json;",
-      },
-    })
+    await fetch(
+      `http://localhost:8080/updateone/${title}/${author}/${params.id}`,
+      {
+        method: "POST",
+        body: JSON.stringify({ title, content, author, selectedDate, tags }),
+        headers: {
+          "Content-type": "application/json;",
+          Accept: "application/json",
+        },
+      }
+    )
       .then(() => console.log("sent update req..."))
       .catch((err) => console.error(err));
     // console.log(title, selectedDate, content, author, tags);
   };
+  useEffect(() => {
+    getOneBlogById();
+  }, []);
   return (
     <>
       <div className="container">
@@ -94,7 +98,6 @@ const SingleBlog = () => {
             value={blog.content}
             containerProps={{ style: { backgroundColor: "#EEF7FF" } }}
             name="content"
-            // onChange={(e) => setContent(e.target.value)}
             className="grey lighten-2 bordered darken-4 white"
           />
           <input

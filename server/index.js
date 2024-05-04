@@ -31,9 +31,17 @@ app.get("/:id", async (req, res) => {
   res.send(ans);
 });
 
-app.post("/updateone", (req, res) => {
-  // console.log(req.body);
-  res.send({ message: "req update received" });
+app.post("/updateone/:title/:author/:id", async (req, res) => {
+  try {
+    console.log(req.params);
+    res.send({ message: "req update received" });
+    await Blog.findByIdAndUpdate(req.params.id, {
+      title: req.params.title,
+      author: req.params.author,
+    }).then(() => console.log("updated"));
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 app.delete("/deleteone/:id", async (req, res) => {
